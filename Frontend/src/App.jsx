@@ -35,15 +35,13 @@ const App = () => {
   const handleSubmit = async () => {
     try {
 
-      const data = {
-        mode: mode,
-        algorithm: algo,
-        text: text
-      }
+      const data = { text }
 
-      const response = await axios.post('url', data);
+      const meth = mode == "encode" ? "encrypt": "decrypt";
+      const url = `http://localhost:3000/${algo}/${meth}`;
+      const response = await axios.post(url, data);
       console.log(response.data);
-      setResult(response.data.result);
+      setResult(response.data.status);
 
     } catch (error) {
       console.log(error);
@@ -107,8 +105,8 @@ const App = () => {
                 onChange={handleModeChange}
                 className='flex gap-7'
               >
-                <FormControlLabel value="Encode" control={<Radio />} label="Encode" />
-                <FormControlLabel value="Decode" control={<Radio />} label="Decode" />
+                <FormControlLabel value="encode" control={<Radio />} label="Encode" />
+                <FormControlLabel value="decode" control={<Radio />} label="Decode" />
               </RadioGroup>
             </FormControl>
           </div>
@@ -124,10 +122,10 @@ const App = () => {
                 onChange={handleAlgoChange}
                 defaultValue=''
               >
-                <MenuItem value="AES">Advanced Encryption Standard (AES)</MenuItem>
-                <MenuItem value="DES">Data Encryption Standard (DES)</MenuItem>
-                <MenuItem value="RSA">Rivest Shamir Adleman (RSA)</MenuItem>
-                <MenuItem value="RC4">Rivest Cipher 4 (RC4)</MenuItem>
+                <MenuItem value="aes">Advanced Encryption Standard (AES)</MenuItem>
+                <MenuItem value="des">Data Encryption Standard (DES)</MenuItem>
+                <MenuItem value="rsa">Rivest Shamir Adleman (RSA)</MenuItem>
+                <MenuItem value="rc4">Rivest Cipher 4 (RC4)</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -161,7 +159,6 @@ const App = () => {
             <div className='flex-1'>
               <TextField
                 id="outlined-multiline-static"
-                label="Result"
                 multiline
                 rows={20}
                 className="w-full !text-black .Mui-readOnly"
