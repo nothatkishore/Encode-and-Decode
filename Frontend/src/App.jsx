@@ -15,7 +15,7 @@ const App = () => {
   const [algo, setAlgo] = useState("");
   const [text, setText] = useState("");
   const [Result, setResult] = useState("Kishore")
-  
+
 
   const handleAlgoChange = (event) => {
     const selectedAlgo = event.target.value;
@@ -32,24 +32,23 @@ const App = () => {
     setText(updatedText);
   }
 
-  const handleSubmit = async () => 
-  {
-      try {
+  const handleSubmit = async () => {
+    try {
 
-        const data = {
-          mode : mode,
-          algorithm : algo,
-          text : text
-        }
-
-        const response = await axios.post('url', data);
-        console.log(response.data);
-        setResult(response.data.result);
-
-      } catch (error) {
-        console.log(error);
-        setResult("Server error");
+      const data = {
+        mode: mode,
+        algorithm: algo,
+        text: text
       }
+
+      const response = await axios.post('url', data);
+      console.log(response.data);
+      setResult(response.data.result);
+
+    } catch (error) {
+      console.log(error);
+      setResult("Server error");
+    }
   };
 
   return (
