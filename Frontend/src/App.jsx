@@ -7,22 +7,49 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import { Button } from '@mui/material';
+import axios from 'axios';
 
 
 const App = () => {
-  const [mode, setMode] = useState("Encode"); // Updated to reflect mode usage.
+  const [mode, setMode] = useState("Encode");
   const [algo, setAlgo] = useState("");
+  const [text, setText] = useState("");
+  const [Result, setResult] = useState("Kishore")
+  
 
   const handleAlgoChange = (event) => {
     const selectedAlgo = event.target.value;
     setAlgo(selectedAlgo);
-    console.log("Selected Algorithm:", selectedAlgo);
   };
 
   const handleModeChange = (event) => {
     const selectedMode = event.target.value;
     setMode(selectedMode);
-    console.log("Selected Mode:", selectedMode);
+  };
+
+  const handleText = (event) => {
+    const updatedText = event.target.value;
+    setText(updatedText);
+  }
+
+  const handleSubmit = async () => 
+  {
+      try {
+
+        const data = {
+          mode : mode,
+          algorithm : algo,
+          text : text
+        }
+
+        const response = await axios.post('url', data);
+        console.log(response.data);
+        setResult(response.data.result);
+
+      } catch (error) {
+        console.log(error);
+        setResult("Server error");
+      }
   };
 
   return (
@@ -42,16 +69,28 @@ const App = () => {
       <main className='flex-1 flex flex-col sm:flex-row bg-slate-100'>
 
         {/* Input Section */}
-        <div className="h-2/5 sm:w-2/5 sm:h-full p-4 sm:p-8 flex items-center">
-          <div className='flex-1'>
-            <TextField
-              id="outlined-multiline-static"
-              label={mode}
-              placeholder={`Enter value to be ${mode.toLowerCase()}d`}
-              multiline
-              rows={20}
-              className='w-full'
-            />
+        <div className="h-2/5 sm:w-2/5 sm:h-full p-4 sm:p-8 flex items-start">
+
+          <div className='flex-1 flex flex-col'>
+            <div className='my-4 py-10'>
+              <h1 className='text-3xl font-semibold text-gray-600 text-center'>
+                {
+                  mode == "Encode" ? "Plaintext" : "Ciphertext"
+                }
+              </h1>
+            </div>
+            <div className='flex-1'>
+              <TextField
+                id="outlined-multiline-static"
+                label={mode}
+                placeholder={`Enter value to be ${mode.toLowerCase()}d`}
+                multiline
+                rows={20}
+                className='w-full'
+                value={text}
+                onChange={handleText}
+              />
+            </div>
           </div>
         </div>
 
@@ -77,12 +116,14 @@ const App = () => {
 
           <div>
             <FormControl fullWidth>
+              <h1 className='mb-2 text-gray-700'>Select Algorithm</h1>
               <Select
                 className="w-full"
                 labelId="algorithm-select-label"
                 id="algorithm-select"
                 value={algo}
                 onChange={handleAlgoChange}
+                defaultValue=''
               >
                 <MenuItem value="AES">Advanced Encryption Standard (AES)</MenuItem>
                 <MenuItem value="DES">Data Encryption Standard (DES)</MenuItem>
@@ -95,24 +136,39 @@ const App = () => {
           {/* Mode Selection */}
 
           <div className='flex justify-center'>
-            <Button className='flex-1' variant='contained'>
-              Hello
+            <Button
+              className='flex-1 !bg-slate-700 !p-2 !rounded-lg'
+              variant='contained'
+              onClick={handleSubmit}
+            >
+              {mode}
             </Button>
+
           </div>
 
         </div>
 
         {/* Output Section */}
-        <div className="h-2/5 sm:w-2/5 sm:h-full p-4 sm:p-8 flex items-center">
-          <div className='flex-1'>
-            <TextField
-              id="outlined-multiline-static"
-              label="Result"
-              multiline
-              rows={20}
-              className='w-full'
-              disabled
-            />
+        <div className="h-2/5 sm:w-2/5 sm:h-full p-4 sm:p-8 flex items-start">
+
+          <div className='flex-1 flex flex-col'>
+            <div className='my-4 py-10'>
+              <h1 className='text-3xl font-semibold text-gray-600 text-center'>
+                {
+                  mode == "Encode" ? "Ciphertext" : "Plaintext"
+                }
+              </h1>
+            </div>
+            <div className='flex-1'>
+              <TextField
+                id="outlined-multiline-static"
+                label="Result"
+                multiline
+                rows={20}
+                className="w-full !text-black .Mui-readOnly"
+                value={Result}
+              />
+            </div>
           </div>
         </div>
 
