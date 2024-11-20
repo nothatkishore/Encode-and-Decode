@@ -12,6 +12,11 @@ app.use(cors({
     credentials: true                // If you're using cookies/auth headers
 }));
 
+app.get('/', (req, res) =>
+{
+    res.status(200).json({status : "ok"});
+})
+
 app.use(express.json());
 app.use('/aes', aes);
 app.use('/des', des);
