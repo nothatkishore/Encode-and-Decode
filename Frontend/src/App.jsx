@@ -14,7 +14,7 @@ const App = () => {
   const [mode, setMode] = useState("Encode");
   const [algo, setAlgo] = useState("");
   const [text, setText] = useState("");
-  const [Result, setResult] = useState("Kishore")
+  const [Result, setResult] = useState("")
 
 
   const handleAlgoChange = (event) => {
@@ -72,7 +72,7 @@ const App = () => {
             <div className='my-4 py-10'>
               <h1 className='text-3xl font-semibold text-gray-600 text-center'>
                 {
-                  mode == "Encode" ? "Plaintext" : "Ciphertext"
+                  mode == "encode" ? "Plaintext" : "Ciphertext"
                 }
               </h1>
             </div>
@@ -124,7 +124,6 @@ const App = () => {
               >
                 <MenuItem value="aes">Advanced Encryption Standard (AES)</MenuItem>
                 <MenuItem value="des">Data Encryption Standard (DES)</MenuItem>
-                <MenuItem value="rsa">Rivest Shamir Adleman (RSA)</MenuItem>
                 <MenuItem value="rc4">Rivest Cipher 4 (RC4)</MenuItem>
               </Select>
             </FormControl>
@@ -152,7 +151,7 @@ const App = () => {
             <div className='my-4 py-10'>
               <h1 className='text-3xl font-semibold text-gray-600 text-center'>
                 {
-                  mode == "Encode" ? "Ciphertext" : "Plaintext"
+                  mode == "encode" ? "Ciphertext" : "Plaintext"
                 }
               </h1>
             </div>
