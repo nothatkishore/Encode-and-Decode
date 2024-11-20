@@ -1,7 +1,6 @@
 import express from 'express'
 import aes from './routes/aes.route.js'
 import des from './routes/des.route.js'
-import rsa from './routes/rsa.route.js'
 import rc4 from './routes/rc4.route.js'
 import cors from 'cors';
 
@@ -16,7 +15,6 @@ app.use(cors({
 app.use(express.json());
 app.use('/aes', aes);
 app.use('/des', des);
-app.use('/rsa', rsa);
 app.use('/rc4', rc4);
 
 app.listen(3000, () => {

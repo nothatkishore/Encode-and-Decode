@@ -1,44 +1,21 @@
-import { webcrypto as crypto } from "crypto";
-import express from "express";
+import crypto from 'crypto';
 
+const AES_KEY = Buffer.from('12345678901234567890123456789012', 'utf8'); // 32-byte key for AES-256
+const AES_IV = Buffer.from('1234567890123456', 'utf8'); // 16-byte IV (used here)
 
-const aesDecrypt = async (request, response) => {
+// AES decryption function
+const aesDecrypt = (req, res) => {
+    const encryptedText = req.body.text; // Encrypted text (Base64)
+
     try {
-        const { encrypted, iv } = request.body; 
+        const decipher = crypto.createDecipheriv('aes-256-cbc', AES_KEY, AES_IV);
+        let decrypted = decipher.update(encryptedText, 'base64', 'utf8');
+        decrypted += decipher.final('utf8');
 
-        if (!encrypted || !iv) {
-            return response.status(400).json({ error: "Both 'encrypted' and 'iv' are required in the request body." });
-        }
-
-        const secretKey = "my_fixed_secret_key_123"; // Fixed 16-byte secret key
-        const decoder = new TextDecoder();
-
-        // Import the fixed key as a cryptographic key for AES-GCM
-        const key = await crypto.subtle.importKey(
-            "raw",
-            new TextEncoder().encode(secretKey), // Convert string to raw bytes
-            "AES-GCM",
-            false,
-            ["decrypt"]
-        );
-
-        // Decrypt the data
-        const decrypted = await crypto.subtle.decrypt(
-            {
-                name: "AES-GCM",
-                iv: new Uint8Array(iv), // Convert IV back to Uint8Array
-            },
-            key,
-            new Uint8Array(encrypted) // Convert encrypted data back to Uint8Array
-        );
-
-        // Send decrypted text as response
-        response.json({
-            decrypted: decoder.decode(decrypted), // Convert decrypted bytes to string
-        });
+        res.status(200).json({ status: decrypted.toString() });
     } catch (error) {
-        console.error("Decryption Error:", error);
-        response.status(500).json({ error: "Decryption failed." });
+        console.error(error);
+        res.status(500).json({ error: 'Decryption failed' });
     }
 };
 
