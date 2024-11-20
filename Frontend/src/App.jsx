@@ -38,7 +38,7 @@ const App = () => {
       const data = { text }
 
       const meth = mode == "encode" ? "encrypt": "decrypt";
-      const url = `http://encode-and-decode-production.up.railway.app/${algo}/${meth}`;
+      const url = `https://encode-and-decode-production.up.railway.app/${algo}/${meth}`;
       const response = await axios.post(url, data);
       console.log(response.data);
       setResult(response.data.status);
